@@ -67,8 +67,10 @@ module.exports = class VagasController {
         }
     }
 
+    // ...
+
     static async listaVagasPorTecnologia(req, res) {
-        const tecnologiasDesejada = req.body;
+        const tecnologiasDesejada = req.body.tecnologiasDesejada; // Ajuste para pegar a propriedade correta
 
         if (!tecnologiasDesejada) {
             return res.status(400).send({
@@ -77,15 +79,15 @@ module.exports = class VagasController {
         }
 
         try {
-            const retornaVagas = await VagasModel.find({ $text: { $search: tecnologiasDesejada } });
+            const retornaVagas = await VagasModel.find({ tecnologiasDesejada: tecnologiasDesejada });
 
-            if (retornaVagas.length === 0) {
+            if (!retornaVagas || retornaVagas.length === 0) { // Verifique se há vaga encontrada
                 return res.status(404).send({
                     mensagem: "Nenhuma vaga encontrada para a tecnologia fornecida."
                 });
             }
 
-            return res.status(200).send({sucesso: retornaVagas});
+            return res.status(200).send({ sucesso: retornaVagas });
         } catch (error) {
             console.error("Erro ao listar vagas:", error);
             return res.status(500).send({
@@ -93,5 +95,4 @@ module.exports = class VagasController {
             });
         }
     }
-
 };
