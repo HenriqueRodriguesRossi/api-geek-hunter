@@ -1,4 +1,6 @@
 const EmpresaModel = require("../models/Empresa")
+const Yup = require("yup")
+const captureErroYup = require("../utils/captureErroYup");
 
 module.exports = class EmpresaController{
     static async cadastrarEmpresa(req, res){
