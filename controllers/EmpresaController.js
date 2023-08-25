@@ -1,10 +1,11 @@
 const EmpresaModel = require("../models/Empresa")
 const Yup = require("yup")
 const captureErroYup = require("../utils/captureErroYup");
+const jwt = require("jsonwebtoken")
 
-module.exports = class EmpresaController{
-    static async cadastrarEmpresa(req, res){
-        const {nome, emailCorporativo, nomeDaEmpresa, vagasEmAberto} = req.body
+module.exports = class EmpresaController {
+    static async cadastrarEmpresa(req, res) {
+        const { nome, emailCorporativo, nomeDaEmpresa, vagasEmAberto } = req.body
 
         const empresSchema = Yup.object().shape({
             nome: Yup.string().required("Campo obrigatório!").min(3, "Nome muito curto!"),
@@ -13,7 +14,7 @@ module.exports = class EmpresaController{
             vagasEmAberto: Yup.number().required("Campo obrigatório!")
         })
 
-        try{
+        try {
             await empresSchema.validate(req.body, { abortEarly: false })
 
             const novaEmpresa = new EmpresaModel({
@@ -25,10 +26,20 @@ module.exports = class EmpresaController{
 
             await novaEmpresa.save()
 
+            const secret = process.env.SECRET;
+
+            const token = jwt.sign(
+                {
+                    id: novaEmpresa._id,
+                },
+                secret
+            );
+
             return res.status(201).send({
-                mensagem: "Sucesso, agora você pode cadastrar novas vagas utilizando o emailcorporativo!"
+                mensagem: "Sucesso, agora você pode cadastrar novas vagas utilizando o email corporativo!",
+                token: token
             })
-        }catch(error){
+        } catch (error) {
             if (error instanceof Yup.ValidationError) {
                 return res.status(422).send({
                     mensagem: captureErroYup(error)

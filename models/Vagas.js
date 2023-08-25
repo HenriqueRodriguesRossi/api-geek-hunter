@@ -6,7 +6,7 @@ const VagaModel = new mongoose.Schema({
         ref: "Empresa",
         require: true
     },
-    tecnologiasDesejadas:{
+    tecnologiasDesejada:{
         type: String,
         ref: "Empresa",
         require: true
