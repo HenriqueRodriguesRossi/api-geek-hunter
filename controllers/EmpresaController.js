@@ -37,7 +37,8 @@ module.exports = class EmpresaController {
 
             return res.status(201).send({
                 mensagem: "Sucesso, agora você pode cadastrar novas vagas utilizando o email corporativo!",
-                token: token
+                token: token,
+                id: novaEmpresa._id
             })
         } catch (error) {
             if (error instanceof Yup.ValidationError) {

@@ -5,14 +5,6 @@ const captureErroYup = require("../utils/captureErroYup");
 
 module.exports = class VagasController {
     static async cadastraVagas(req, res) {
-        const id = req.params._id
-
-        const empresa = await EmpresaModel.findById(id, "-password");
-
-        if (!empresa) {
-            return res.status(403).json({ msg: "Crie uma conta para a sua empresa!" });
-        }
-
         const { tituloDaVaga, tecnologiasDesejada, salario, regimeDeTrabalho, modalidadeDeTrabalho, enderecoDaEmpresa, emailParaContato } = req.body;
 
         try {
@@ -63,11 +55,11 @@ module.exports = class VagasController {
 
             return res.status(500).send({
                 mensagem: "Erro ao cadastrar vaga!"
-            });
+            },
+                console.log(error)
+            );
         }
     }
-
-    // ...
 
     static async listaVagasPorTecnologia(req, res) {
         const tecnologiasDesejada = req.body.tecnologiasDesejada; // Ajuste para pegar a propriedade correta
@@ -93,6 +85,47 @@ module.exports = class VagasController {
             return res.status(500).send({
                 mensagem: "Erro ao listar as vagas."
             });
+        }
+    }
+
+    static async retornaTodasAsVagas(req, res) {
+        try {
+            const vagas = await VagasModel.find();
+
+            if (vagas.length === 0) {
+                return res.status(404).send({
+                    mensagem: "Nenhuma vaga cadastrada."
+                });
+            }
+
+            return res.status(200).send({ vagas: vagas });
+        } catch (error) {
+            console.error("Erro ao retornar todas as vagas:", error);
+            return res.status(500).send({
+                mensagem: "Erro ao retornar todas as vagas."
+            });
+        }
+    }
+
+    static async excluirVaga(req, res){
+        const tituloDaVaga = req.body
+
+        if(!tituloDaVaga){
+            return res.status(400).send({
+                mensagem: "Primeiro digite alguma coisa!"
+            })
+        }
+
+        try{
+            const procuaVaga = await VagasModel.findOneAndDelete({tituloDaVaga})
+
+            return res.status(200).send({
+                mensagem: "Vaga excluída com sucesso!"
+            })
+        }catch(error){
+            return res.status(500).send({
+                mensagem: "Erro ao excluir a vaga!"
+            })
         }
     }
 };
