@@ -1,20 +1,20 @@
-const mongoose = require("mongoose")
-const dbUser = process.env.dbuser
-const dbPass = process.env.dbpass
+const mongoose = require("mongoose");
+const dbUser = process.env.dbuser;
+const dbPass = process.env.dbpass;
 
-function connection(){
-    mongoose.connect(`mongodb+srv://${dbUser}:${dbPass}@cluster0.fsiei4f.mongodb.net/?retryWrites=true&w=majority`)
+function connectToDatabase() {
+    mongoose.connect(`mongodb+srv://${dbUser}:${dbPass}@cluster0.fsiei4f.mongodb.net/?retryWrites=true&w=majority`);
 
-    const connection = mongoose.connection
+    const connection = mongoose.connection;
 
-    connection.on("open", ()=>{
-        console.log("Conectado ao banco com sucesso!")
-    })
+    connection.on("open", () => {
+        console.log("Connected to the database successfully!");
+    });
 
-    connection.on("error", (error)=>{
-        console.log("Erro ao conectar ao banco!")
-    })
+    connection.on("error", (error) => {
+        console.log("Error connecting to the database!");
+    });
 }
 
-connection()
-module.exports = mongoose
+connectToDatabase();
+module.exports = mongoose;
