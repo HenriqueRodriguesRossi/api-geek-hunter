@@ -1,6 +1,6 @@
-const router = require("express").Router()
-const CompanyController = require("../controllers/CompanyController")
+const router = require("express").Router();
+const CompanyController = require("../controllers/CompanyController");
 
-router.post("/contratar-programador", CompanyController.registerCompany)
+router.post("/hire-developer", CompanyController.registerCompany);
 
-module.exports = router
+module.exports = router;

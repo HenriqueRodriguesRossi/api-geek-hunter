@@ -1,20 +1,20 @@
-const express = require("express")
-const app = express()
-require("dotenv").config()
-require("./db/connection")
+const express = require("express");
+const app = express();
+require("dotenv").config();
+require("./db/connection");
 
-app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const ProfissionaisRouter = require("./router/ProfissionaisRouter")
-app.use(ProfissionaisRouter)
+const CandidatesRouter = require("./router/CandidatesRouter");
+app.use(CandidatesRouter);
 
-const EmpresaRouter = require("./router/EmpresaRouter")
-app.use(EmpresaRouter)
+const CompanyRouter = require("./router/CompanyRouter");
+app.use(CompanyRouter);
 
-const VagasRouter = require("./router/VagasRouter")
-app.use(VagasRouter)
+const JobsRouter = require("./router/JobsRouter");
+app.use(JobsRouter);
 
-app.listen(8080, ()=>{
-    console.log("O servidor está rodando na porta 8080")
-})
+app.listen(8080, () => {
+  console.log("The server is running on port 8080");
+});
