@@ -34,7 +34,7 @@ module.exports = class ProfessionalsController {
             const url = `${linkedinURL}`;
             const response = await axios.get(url);
 
-            if (!response) {
+            if (response.status !== 200) {
                 return res.status(404).send({
                     message: "Linkedin profile not found!"
                 });
